@@ -28,10 +28,10 @@ def load(filename):
     return df
 
 def cleaning(comments):
-    doc = mecab.nouns(comments)
-    doc = " ".join(i for i in doc)
-    #print(doc)
-    return doc
+    #doc = mecab.nouns(comments)
+    #doc = " ".join(i for i in doc)
+    #return doc
+    return comments
 
 def ready_text(df):
     df = df.astype(str)
@@ -46,18 +46,16 @@ def ready_text(df):
 
 def dk_freq(text_list):
     #vect = CountVectorizer().fit(text_list)
-    #vect = CountVectorizer(min_df=1, ngram_range=(1,3)).fit(text_list)
-    vect = CountVectorizer(min_df=1, ngram_range=(1,1)).fit(text_list)
+    vect = CountVectorizer(min_df=1, ngram_range=(3,3)).fit(text_list)
     X = vect.transform(text_list)
     
-    word_freq_df = pd.DataFrame({'term': vect.get_feature_names()
+    df = pd.DataFrame({'term': vect.get_feature_names()
         , 'occurrences':np.asarray(X.sum(axis=0)).ravel().tolist()})
     
-    #word_freq_df['frequency'] = word_freq_df['occurrences']/np.sum(word_freq_df['occurrences'])
+    #df['frequency'] = df['occurrences']/np.sum(df['occurrences'])
+    word_freq_df = df[df['occurrences'] >= 2]
     
-    logger.info(word_freq_df.head())
-    logger.info("")
-    print (word_freq_df.sort_values('occurrences',ascending = False))
+    print (word_freq_df.sort_values('occurrences',ascending = False).head(10))
 
     return word_freq_df
 
@@ -73,9 +71,15 @@ if __name__ == '__main__':
 
     df = load(args.filename)
     logger.info("read_csv[%s]: %s" % (args.filename, df.shape))
-    text_list = ready_text(df)
-    #print(text_list)
-    dk_freq(text_list)
+
+    grouped = df.groupby('product_info')
+    for product_info, group in grouped:
+        if group.shape[0] > 100:
+            print("="*30)
+            logger.info(product_info)
+            text_list = ready_text(group)
+            #print(text_list)
+            dk_freq(text_list)
 
 
 
