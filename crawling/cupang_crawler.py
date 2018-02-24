@@ -209,9 +209,10 @@ class CupangCrawler:
 
             # Clear Cookies on the browser => todo
             #if self.item_lists_num > 10:
-            logger.info("Start: deleteAllCookies")
-            self.driver.delete_all_cookies()
-            logger.info("End: deleteAllCookies")
+            
+            #logger.info("Start: deleteAllCookies")
+            #self.driver.delete_all_cookies() => exception
+            #logger.info("End: deleteAllCookies")
 
         except StopIteration:
             logger.info("StopIteration")
