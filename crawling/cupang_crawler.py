@@ -19,7 +19,6 @@ import pickle
 import json
 import sys 
 import itertools
-from bs4 import BeautifulSoup
 import re
 import time
 import os
@@ -127,7 +126,7 @@ class CupangCrawler:
         num = 1
         while True:
         
-            bsObj = BeautifulSoup(self.driver.page_source, "html5lib")
+            bsObj = Soup(self.driver.page_source, "html5lib")
 
             for link in bsObj.find_all(tag_to_find, href=re.compile("^(/vp/products?)")):
 
@@ -246,12 +245,11 @@ class CupangCrawler:
 
         logger.info('wait clickable for review button')
         venue = wait(self.driver, 3).until(EC.element_to_be_clickable((By.XPATH, 
-            '//*[@id="btfTab"]/ul[1]/li[2]'
+            '//*[@id="btfTab"]/ul[1]/li[2]/span'
         )))
         logger.info('click review button')
         #venue.click()
         self.driver.execute_script('arguments[0].click()', venue)
-        '''
         try:
             logger.info('wait element present sdp-review__article__search-result')
             element_present = EC.presence_of_element_located((By.XPATH, 
@@ -265,7 +263,6 @@ class CupangCrawler:
         except NoSuchElementException as ex:
             logger.info('NoSuchElementException')
             logger.info(ex)
-        '''
 
         # wait to find the total review count
         try:
@@ -285,7 +282,6 @@ class CupangCrawler:
         time.sleep(1)
         soup = Soup(self.driver.page_source, "html5lib")
         total_review = 0
-        #<div class="sdp-review__average__total-star__info-count">28</div>
         select_data = soup.select_one(
             'div.sdp-review__average__total-star__info-count')
         logger.info("Total Review = [%s] " % select_data)
@@ -372,9 +368,8 @@ class CupangCrawler:
 
             try:
                 logger.info('click =>  page_num:' + str(page_num) + ' current_num:' + str(current_num))
-
                 venue = wait(self.driver, 3).until(EC.element_to_be_clickable((By.XPATH, 
-                    '//*[@id="prod-review"]/div/div[5]/section[4]/div[3]/button[' + str(current_num) +']'
+                    '//*[@id="btfTab"]/ul[2]/li[2]/div/div[5]/section[4]/div[3]/button[' + str(current_num) +']'
                 )))
                 logger.info('click: ' + str(page_num))
                 #venue.click()
