@@ -246,12 +246,12 @@ class CupangCrawler:
 
         logger.info('wait clickable for review button')
         venue = wait(self.driver, 3).until(EC.element_to_be_clickable((By.XPATH, 
-            '//*[@id="product-contents-placeholder"]/div/div/div[2]/div[1]/div[1]/div/div/a[2]'
+            '//*[@id="btfTab"]/ul[1]/li[2]'
         )))
         logger.info('click review button')
         #venue.click()
         self.driver.execute_script('arguments[0].click()', venue)
-
+        '''
         try:
             logger.info('wait element present sdp-review__article__search-result')
             element_present = EC.presence_of_element_located((By.XPATH, 
@@ -265,12 +265,13 @@ class CupangCrawler:
         except NoSuchElementException as ex:
             logger.info('NoSuchElementException')
             logger.info(ex)
+        '''
 
         # wait to find the total review count
         try:
             logger.info('wait element sdp-review__average__total-star__info-count')
             element_present = EC.presence_of_element_located((By.XPATH, 
-                '//*[@id="prod-review"]/div/div[3]/section[1]/div[1]/div[2]'
+                '//*[@id="btfTab"]/ul[2]/li[2]/div/div[3]/section[1]/div[1]/div[2]'
             ))
             wait(self.driver, 3).until(element_present)
             logger.info('element found sdp-review__average__total-star__info-count')
@@ -281,10 +282,13 @@ class CupangCrawler:
             logger.info('NoSuchElementException')
             logger.info(ex)
 
+        time.sleep(1)
         soup = Soup(self.driver.page_source, "html5lib")
         total_review = 0
+        #<div class="sdp-review__average__total-star__info-count">28</div>
         select_data = soup.select_one(
             'div.sdp-review__average__total-star__info-count')
+        logger.info("Total Review = [%s] " % select_data)
         if select_data != None:
             total_review = int(select_data.text.replace(',',''))
         logger.info("Total Review = [%d] " % total_review)

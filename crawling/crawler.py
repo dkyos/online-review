@@ -9,7 +9,8 @@ if __name__ == "__main__":
     crawler = CupangCrawler()
 
     # setting search keyword
-    crawler.init('LG전자 디오스 매직스페이스 양문형 냉장고 ')
+    #crawler.init('삼성전자 초순도 청정 큐브 공기청정기 가정용')
+    crawler.init('삼성전자 초순도 청정 큐브 공기청정기 가정용 AX80N9080WWD 80㎡')
 
     # store search urls
     crawler.search_item_list()
