@@ -11,6 +11,7 @@ if __name__ == "__main__":
     driver.init('xxx@xxx.com', 'yyyyy')
 
     driver.login()
+    driver.go_to_ready()
 
     #driver.create_monitor()
 

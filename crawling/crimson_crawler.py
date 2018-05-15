@@ -84,7 +84,6 @@ class CrimsonHexagon:
         logger.info("Done !!!!")
 
     def login(self):
-
         # Send user,pwdto web
         USER_INPUT_CSS = 'input[class="focusOnMe"]';
         user = self.driver.find_element_by_css_selector(USER_INPUT_CSS)
@@ -100,9 +99,20 @@ class CrimsonHexagon:
         logger.info('enter username and password')
         try:
             logger.info("wait start")
-            venue = wait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, 
-                    '/html/body/div[4]/div/div/div/div[2]/div[2]'
+            
+            #<div class="footer-button skip">SKIP</div>
+
+            # '/html/body/div[3]/div/div/div/div[2]/div[2]' 
+            # or '/html/body/div[4]/div/div/div/div[2]/div[2]' 
+            #venue = wait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, 
+            #        '/html/body/div[4]/div/div/div/div[2]/div[2]'
+            #)))
+
+            #body > div.ReactModalPortal > div > div > div > div.footer > div.footer-button.skip
+            venue = wait(self.driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR,
+                "div.footer-button.skip"
             )))
+
             logger.info("wait success")
             venue.click()
             #self.driver.execute_script('arguments[0].click()', venue)
@@ -115,5 +125,47 @@ class CrimsonHexagon:
             logger.info("Timeout")
 
         logger.info('click skip button')
-        
+
+
+    def go_to_ready(self):
+        logger.info('go to ready')
+
+        try:
+            logger.info("wait start")
+            venue = wait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH,
+                '//*[@id="forsight"]'
+            )))
+            logger.info("wait success")
+            venue.click()
+            #self.driver.execute_script('arguments[0].click()', venue)
+            logger.info("click")
+        except NoSuchElementException:
+            logger.info("wait fail")
+            logger.info("No such element")
+        except TimeoutException:
+            logger.info("wait fail")
+            logger.info("Timeout")
+
+        logger.info('click forsight button')
+
+        try:
+            logger.info("wait start")
+            venue = wait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH,
+                '//*[@id="newMonitor"]'
+            )))
+            logger.info("wait success")
+            venue.click()
+            #self.driver.execute_script('arguments[0].click()', venue)
+            logger.info("click")
+        except NoSuchElementException:
+            logger.info("wait fail")
+            logger.info("No such element")
+        except TimeoutException:
+            logger.info("wait fail")
+            logger.info("Timeout")
+
+        logger.info('click forsight button')
+
+        #//*[@id="monitorSetup"]/ul/li[1]
+
         time.sleep(1000)
